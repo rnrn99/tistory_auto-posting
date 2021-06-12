@@ -86,8 +86,12 @@ def uploadImage(filePath):
 
     try:
         item = json.loads(rq.text)
+        
+        # 정상 작동 확인
+        print("Upload Image... status" + item["tistory"]["status"])
     except:
         print("Upload Image Error")
+        # print(rq.text)
     
     return item["tistory"]["replacer"]
 
@@ -162,7 +166,15 @@ def autoPosting():
         'tag': '한화이글스',
     }
 
-    requests.post(url, params=parameters)
+    rq = requests.post(url, params=parameters)
+    try:
+        posting = json.loads(rq.text)
+        
+        # 정상 작동 확인
+        print("Posting... status" + posting["tistory"]["status"])
+    except:
+        print("Posting Error")
+        # print(rq.text)
 
 def createDirectory():
     try: 

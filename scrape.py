@@ -6,6 +6,8 @@ import requests
 import re
 import time
 import json
+import os
+import shutil
 
 date = str(datetime.today().month)+ "월" + str(datetime.today().day) + "일"
 isDH = False # 더블헤더 경기
@@ -57,18 +59,18 @@ def scrapeData():
     global isDH 
 
     # 오늘 날짜에 더블헤더 일정이 있는지 체크
-    if(game[today - 1].find("td", attrs={"rowspan":"2"}) == None):
+    if(game[today - 2].find("td", attrs={"rowspan":"2"}) == None):
         isDH = False
     else:
         isDH = True
 
     # 오늘 날짜의 경기 고르기
     if not isDH:
-        link = "https://sports.news.naver.com/" + game[today - 1].find("span", attrs={"class":"td_btn"}).find("a")["href"]
+        link = "https://sports.news.naver.com/" + game[today - 2].find("span", attrs={"class":"td_btn"}).find("a")["href"]
         enterPage(link, 0)
     else:
         for i in range(0,2):
-            link = "https://sports.news.naver.com/" + game[today - 1].find_all("span", attrs={"class":"td_btn"})[i].find_all("a")[0]["href"]
+            link = "https://sports.news.naver.com/" + game[today - 2].find_all("span", attrs={"class":"td_btn"})[i].find_all("a")[0]["href"]
             enterPage(link, i + 1)
     
     browser.quit()   
@@ -162,6 +164,22 @@ def autoPosting():
 
     requests.post(url, params=parameters)
 
+def createDirectory():
+    try: 
+        if not os.path.exists('image'):
+            os.makedirs('image')
+    except OSError:
+        print('createDirectory Error')
+
+def removeDirectory():
+    try: 
+        if os.path.exists('image'):
+            shutil.rmtree('image')
+    except OSError:
+        print('removeDirectory Error')
+
 if __name__ == '__main__':
+    createDirectory()
     scrapeData()
     autoPosting()
+    removeDirectory()

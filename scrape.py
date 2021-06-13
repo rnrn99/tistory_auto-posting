@@ -89,17 +89,16 @@ def uploadImage(filePath):
         'output': 'json'
     }
     rq = requests.post(upload_url, params=parameters, files=files)
-    
-    try:
-        item = json.loads(rq.text)
-        
+    item = json.loads(rq.text)["tistory"]
+
+    if (item["status"] == '200'):
         # 정상 작동 확인
-        print("Upload Image... status" + item["tistory"]["status"])
-    except:
+        print("Upload Image... status", item["status"])
+    else:
         print("Upload Image Error")
         print(rq.text)
     
-    return item["tistory"]["replacer"]
+    return item["replacer"]
 
 def createImgContent(imgName, imgNum):
     if isDH:
@@ -163,7 +162,7 @@ def autoPosting():
     
     parameters = {
         'access_token': access_token,
-        'output': '{output-type}',
+        'output': 'json',
         'blogName': blogName,
         'title': title,
         'content': content,
@@ -173,15 +172,13 @@ def autoPosting():
     }
 
     rq = requests.post(url, params=parameters)
-    soup = BeautifulSoup(rq.text, "lxml")
-    postingStatus = soup.find("status").get_text()
+    posting = json.loads(rq.text)["tistory"]
 
-    if(postingStatus == '200'):
+    if(posting['status'] == '200'):
         # 정상 작동 확인
-        print("Posting... status" + postingStatus)
+        print("Posting... status", posting["status"])
     else:
-        print("Posting Error")
-        print(soup)
+        print("Posting Error : ", posting["error_message"])
 
 def createDirectory():
     try: 

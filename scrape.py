@@ -35,10 +35,16 @@ def enterPage(link, num):
     try:
         time.sleep(1)
         
+        # 홈 / 원정 확인
+        home = browser.find_elements_by_class_name('MatchBox_name__11AyG')[1].text
+
         # 경기 결과 캡쳐 후 이미지 저장
         result = browser.find_element_by_class_name('Home_game_head__3EEZZ').screenshot_as_png
         recordGraph = browser.find_element_by_class_name('TeamVS_comp_team_vs__fpu3N').screenshot_as_png
-        playerRecord = browser.find_element_by_class_name('PlayerRecord_record_table_group__2bRI3').screenshot_as_png
+        if(home == '한화'):
+            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[1].screenshot_as_png
+        else:
+            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[0].screenshot_as_png
 
         createImage('result', result, num)
         createImage('recordGraph', recordGraph, num)
@@ -174,7 +180,7 @@ def autoPosting():
         print("Posting... status" + posting["tistory"]["status"])
     except:
         print("Posting Error")
-        # print(rq.text)
+        print(rq.text)
 
 def createDirectory():
     try: 

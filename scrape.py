@@ -89,7 +89,7 @@ def uploadImage(filePath):
         'output': 'json'
     }
     rq = requests.post(upload_url, params=parameters, files=files)
-
+    
     try:
         item = json.loads(rq.text)
         
@@ -97,7 +97,7 @@ def uploadImage(filePath):
         print("Upload Image... status" + item["tistory"]["status"])
     except:
         print("Upload Image Error")
-        # print(rq.text)
+        print(rq.text)
     
     return item["tistory"]["replacer"]
 
@@ -173,14 +173,15 @@ def autoPosting():
     }
 
     rq = requests.post(url, params=parameters)
-    try:
-        posting = json.loads(rq.text)
-        
+    soup = BeautifulSoup(rq.text, "lxml")
+    postingStatus = soup.find("status").get_text()
+
+    if(postingStatus == '200'):
         # 정상 작동 확인
-        print("Posting... status" + posting["tistory"]["status"])
-    except:
+        print("Posting... status" + postingStatus)
+    else:
         print("Posting Error")
-        print(rq.text)
+        print(soup)
 
 def createDirectory():
     try: 

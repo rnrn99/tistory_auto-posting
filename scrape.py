@@ -6,6 +6,7 @@ import requests
 import re
 import time
 import json
+import sys
 import os
 import shutil
 
@@ -18,8 +19,12 @@ options.headless = True
 options.add_argument("window-size=1920x1080")
 options.add_argument('--start-fullscreen')
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36")
-    
-browser = webdriver.Chrome(options=options)
+
+if getattr(sys, 'frozen', False):
+    path = os.path.join(sys._MEIPASS, "chromedriver.exe")
+    browser = webdriver.Chrome(path, options=options)
+else:
+    browser = webdriver.Chrome(options=options)
 
 def createImage(filename, file_png, num):
     if not isDH:
@@ -94,17 +99,18 @@ def uploadImage(filePath):
     if (item["status"] == '200'):
         # 정상 작동 확인
         print("Upload Image... status", item["status"])
+
     else:
         print("Upload Image Error")
         print(rq.text)
     
-    return item["replacer"]
+    return item["url"]
 
 def createImgContent(imgName, imgNum):
     if isDH:
-        content = '<p>' + uploadImage('./image/{}_{}_{}.png'.format(imgName, date, imgNum)) + '</p>'
+        content = '<img src="' + uploadImage('./image/{}_{}_{}.png'.format(imgName, date, imgNum)) + '">' + '</img>'
     else:
-        content = '<p>' + uploadImage('./image/{}_{}.png'.format(imgName, date)) + '</p>'
+        content = '<img src="' + uploadImage('./image/{}_{}.png'.format(imgName, date)) + '">' + '</img>'
     return content
 
 def postingResult():
@@ -197,5 +203,6 @@ def removeDirectory():
 if __name__ == '__main__':
     createDirectory()
     scrapeData()
+    time.sleep(1)
     autoPosting()
     removeDirectory()

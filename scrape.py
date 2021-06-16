@@ -203,6 +203,5 @@ def removeDirectory():
 if __name__ == '__main__':
     createDirectory()
     scrapeData()
-    time.sleep(1)
     autoPosting()
     removeDirectory()

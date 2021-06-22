@@ -12,6 +12,7 @@ import shutil
 
 date = str(datetime.today().month)+ "월" + str(datetime.today().day) + "일"
 isDH = False # 더블헤더 경기
+isWin = False # 승/패 여부
 
 # headless 옵션 설정
 options = webdriver.ChromeOptions()
@@ -24,7 +25,7 @@ if getattr(sys, 'frozen', False):
     path = os.path.join(sys._MEIPASS, "chromedriver.exe")
     browser = webdriver.Chrome(path, options=options)
 else:
-    browser = webdriver.Chrome(options=options)
+    browser = webdriver.Chrome(options=options)  
 
 def createImage(filename, file_png, num):
     if not isDH:
@@ -39,17 +40,35 @@ def enterPage(link, num):
 
     try:
         time.sleep(1)
+
+        global isWin
         
-        # 홈 / 원정 확인
-        home = browser.find_elements_by_class_name('MatchBox_name__11AyG')[1].text
+        # 홈 / 원정 확인 & 승 / 패 여부 확인 -> ex. 한화승김민우
+        team = browser.find_elements_by_class_name('MatchBox_text__22e-R')[1].text
 
         # 경기 결과 캡쳐 후 이미지 저장
         result = browser.find_element_by_class_name('Home_game_head__3EEZZ').screenshot_as_png
         recordGraph = browser.find_element_by_class_name('TeamVS_comp_team_vs__fpu3N').screenshot_as_png
-        if(home == '한화'):
-            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[1].screenshot_as_png
-        else:
+
+        # team에 한화가 없으면 한화 원정 경기, 있으면 한화 홈 경기
+        if(team.find('한화') == -1):
             playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[0].screenshot_as_png
+
+            # 한화의 승 / 패 여부 확인 -> 한화가 아닌 상대팀이 졌으면 한화 승
+            if(team.find("승") == -1):
+                isWin = True
+            else:
+                isWin = False
+        else:
+            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[1].screenshot_as_png
+
+            # 한화의 승 / 패 여부 확인 -> 한화가 졌으면 패
+            if(team.find("승") == -1):
+                isWin = False
+            else:
+                isWin = True
+        
+        print(isWin)
 
         createImage('result', result, num)
         createImage('recordGraph', recordGraph, num)
@@ -152,8 +171,19 @@ def postingPlayerRecord():
     
     return content
 
+def makeTag():
+    if isWin:
+        tag = '오늘한화이김'
+    else:
+        tag = '내일한화이김'
+
+    return tag
+
 def autoPosting():
     url = posting_url
+    tag = makeTag()
+    print(tag)
+
     global keyEnter 
     keyEnter = '<h3 data-ke-size="size23">&nbsp;</h3>'
     
@@ -174,7 +204,7 @@ def autoPosting():
         'content': content,
         'visibility': '3',
         'category': categoryId,
-        'tag': '한화이글스',
+        'tag': '{}, 한화이글스'.format(tag)
     }
 
     rq = requests.post(url, params=parameters)

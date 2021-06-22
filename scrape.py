@@ -67,8 +67,6 @@ def enterPage(link, num):
                 isWin = False
             else:
                 isWin = True
-        
-        print(isWin)
 
         createImage('result', result, num)
         createImage('recordGraph', recordGraph, num)
@@ -182,7 +180,6 @@ def makeTag():
 def autoPosting():
     url = posting_url
     tag = makeTag()
-    print(tag)
 
     global keyEnter 
     keyEnter = '<h3 data-ke-size="size23">&nbsp;</h3>'

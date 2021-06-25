@@ -1,5 +1,13 @@
 # tistory_auto-posting
 
+<h3>✨Used✨</h3>
+<div>
+  <img src="https://img.shields.io/badge/Python-3766AB?style=for-the-badge&logo=Python&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Beautifulsoup-333?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Requests-blueviolet?style=for-the-badge"/>
+</div>
+
 ### 설명
 > 한화이글스의 경기 결과를 기록하기 위해 만든 프로그램입니다.
 > 

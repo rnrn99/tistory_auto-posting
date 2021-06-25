@@ -53,6 +53,7 @@ def enterPage(link, num):
         # team에 한화가 없으면 한화 원정 경기, 있으면 한화 홈 경기
         if(team.find('한화') == -1):
             playerRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[0].screenshot_as_png
+            pitcherRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[2].screenshot_as_png
 
             # 한화의 승 / 패 여부 확인 -> 한화가 아닌 상대팀이 졌으면 한화 승
             if(team.find("승") == -1):
@@ -61,6 +62,8 @@ def enterPage(link, num):
                 isWin = False
         else:
             playerRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[1].screenshot_as_png
+            pitcherRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[3].screenshot_as_png
+
 
             # 한화의 승 / 패 여부 확인 -> 한화가 졌으면 패
             if(team.find("승") == -1):
@@ -71,6 +74,8 @@ def enterPage(link, num):
         createImage('result', result, num)
         createImage('recordGraph', recordGraph, num)
         createImage('playerRecord', playerRecord, num)
+        createImage('pitcherRecord', pitcherRecord, num)
+
     except:
         print("Enter page Error")
 
@@ -161,10 +166,12 @@ def postingPlayerRecord():
     if isDH:
         for i in range(0, 2):
             content += '<h3 data-ke-size="size23">{}차전 한화 선수단 기록</h3>'.format(i + 1)+ keyEnter
-            content += createImgContent('playerRecord', i + 1) + keyEnter
+            content += createImgContent('playerRecord', i + 1)
+            content += createImgContent('pitcherRecord', i + 1)+ keyEnter
     else:
         content = '<h3 data-ke-size="size23">한화 선수단 기록</h3>'+ keyEnter
-        content += createImgContent('playerRecord', 0) + keyEnter
+        content += createImgContent('playerRecord', 0)
+        content += createImgContent('pitcherRecord', 0)+ keyEnter
     content += keyEnter
     
     return content

@@ -52,7 +52,7 @@ def enterPage(link, num):
 
         # team에 한화가 없으면 한화 원정 경기, 있으면 한화 홈 경기
         if(team.find('한화') == -1):
-            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[0].screenshot_as_png
+            playerRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[0].screenshot_as_png
 
             # 한화의 승 / 패 여부 확인 -> 한화가 아닌 상대팀이 졌으면 한화 승
             if(team.find("승") == -1):
@@ -60,7 +60,7 @@ def enterPage(link, num):
             else:
                 isWin = False
         else:
-            playerRecord = browser.find_elements_by_class_name('PlayerRecord_record_table_group__2bRI3')[1].screenshot_as_png
+            playerRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[1].screenshot_as_png
 
             # 한화의 승 / 패 여부 확인 -> 한화가 졌으면 패
             if(team.find("승") == -1):
@@ -232,4 +232,4 @@ if __name__ == '__main__':
     scrapeData()
     autoPosting()
     removeDirectory()
-    os.system("pause")
+    # os.system("pause")

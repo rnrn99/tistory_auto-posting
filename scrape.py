@@ -130,9 +130,9 @@ def uploadImage(filePath):
 
 def createImgContent(imgName, imgNum):
     if isDH:
-        content = '<img src="' + uploadImage('./image/{}_{}_{}.png'.format(imgName, date, imgNum)) + '">' + '</img>'
+        content = '<img src="' + uploadImage('./image/{}_{}_{}.png'.format(imgName, date, imgNum)) + '", style="max-width: 100%; height: auto;">' + '</img>'
     else:
-        content = '<img src="' + uploadImage('./image/{}_{}.png'.format(imgName, date)) + '">' + '</img>'
+        content = '<img src="' + uploadImage('./image/{}_{}.png'.format(imgName, date)) + '", style="max-width: 100%; height: auto;">' + '</img>'
     return content
 
 def postingResult():

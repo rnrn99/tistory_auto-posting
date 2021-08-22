@@ -99,11 +99,11 @@ def scrapeData():
 
     # 오늘 날짜의 경기 고르기
     if not isDH:
-        link = "https://sports.news.naver.com/" + game[today - 1].find("span", attrs={"class":"td_btn"}).find("a")["href"]
+        link = "https://sports.news.naver.com" + game[today - 1].find("span", attrs={"class":"td_btn"}).find("a")["href"]
         enterPage(link, 0)
     else:
         for i in range(0,2):
-            link = "https://sports.news.naver.com/" + game[today - 1].find_all("span", attrs={"class":"td_btn"})[i].find_all("a")[0]["href"]
+            link = "https://sports.news.naver.com" + game[today - 1].find_all("span", attrs={"class":"td_btn"})[i].find_all("a")[0]["href"]
             enterPage(link, i + 1)
     
     browser.quit()   
@@ -199,6 +199,9 @@ def autoPosting():
     content += postingResult()
     content += postingGraph()
     content += postingPlayerRecord()
+
+    content += '<p>[##_Image|kage@bnZiHJ/btrb7a54kYf/TQ7Zk3s9INbIWh7Wb5IK7K/img.jpg|alignCenter|data-origin-width="581" data-origin-height="481" data-filename="symbol.jpg" width="100" height="83" data-ke-mobilestyle="widthOrigin"|||_##]</p>'
+    content += keyEnter
     
     parameters = {
         'access_token': access_token,

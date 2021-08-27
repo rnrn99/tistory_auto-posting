@@ -56,7 +56,8 @@ def enterPage(link, num):
             pitcherRecord = browser.find_elements_by_class_name('PlayerRecord_table_area__1fIBC')[2].screenshot_as_png
 
             # 한화의 승 / 패 여부 확인 -> 한화가 아닌 상대팀이 졌으면 한화 승
-            if(team.find("승") == -1):
+            # 연장 경기 없어짐에 따라 무승부인 경우 처리 -> "투"이면 무승부
+            if(team.find("승") == -1 and team.find("투") == -1):
                 isWin = True
             else:
                 isWin = False
